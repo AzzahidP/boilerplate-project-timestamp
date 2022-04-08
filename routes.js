@@ -10,7 +10,7 @@ router.get('/api', (req, res) => {
     res.status(200).json({"unix":unixRes, "utc":utcRes})
 })
 
-router.get('/api/:date', (req, res) => {
+router.get('/api/:date?', (req, res) => {
     let date = req.params.date;
     const splittedDate = date.split("-");
     let unixRes;
@@ -18,6 +18,9 @@ router.get('/api/:date', (req, res) => {
     if (splittedDate.length==1){
         unixRes = date;
         utcRes = new Date(parseInt(date)).toUTCString();
+        if (utcRes === "Invalid Date"){
+            res.json({ error : "Invalid Date" })
+        }
     } else {
         unixRes = new Date(date).valueOf();
         utcRes = new Date(date).toUTCString();
